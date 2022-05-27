@@ -4,8 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="contact, 秋名山翻车的博客">
-    <meta name="description" content="秋名山翻车的博客">
+    <meta name="keywords" content="maskrcnn-benckmark-master （零）：代码解读, 秋名山翻车的博客">
+    <meta name="description" content="前言
+之前一直都有使用Mask-RCNN模型，从一开始使用的MMDetection2框架中的Mask-RCNN，能够比较正常的运行，但是想要修改成我需要的形式时，发现MMDetection2中有一些地方都已经模块化好了，不方便修改，于是便转">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +20,7 @@
 
     
 
-    <title>contact | 秋名山翻车的博客</title>
+    <title>maskrcnn-benckmark-master （零）：代码解读 | 秋名山翻车的博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
@@ -311,12 +312,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">contact</h1>
+                    <h1 class="description center-align post-title">maskrcnn-benckmark-master （零）：代码解读</h1>
                 </div>
             </div>
         </div>
@@ -430,9 +431,17 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                <span class="chip bg-color">深度学习</span>
+                            </a>
+                        
+                            <a href="/tags/MaskRCNN/">
+                                <span class="chip bg-color">MaskRCNN</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -468,7 +477,26 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>之前一直都有使用Mask-RCNN模型，从一开始使用的MMDetection2框架中的Mask-RCNN，能够比较正常的运行，但是想要修改成我需要的形式时，发现MMDetection2中有一些地方都已经模块化好了，不方便修改，于是便转战到现在的maskrcnn-benckmark-master这个版本。</p>
+<p>前段时间是有把maskrcnn-benckmark-master都阅读一遍，并按照了自己的需求修改了网络结构，但是现在又要修改其他部分，发现关于代码细节，我以及记不得太清楚了orz。想到好久都没有更新博客了，于是便决定记录一下第二次学习这个代码的过程，希望对同样想学习相关代码的朋友有所帮助，如果有理解有误的地方，还请评论区拍砖~</p>
+</blockquote>
+<h3 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h3><blockquote>
+<p>因为本系列的文章是介绍maskrcnn-benchmark-master的网络构建的一些代码，方便根据这个项目将其修改成自己所需要的形式，所以在阅读本系列文章时，需要提前对Faster-RCNN、Mask-RCNN模型本身的一些细节有一个大致的了解，并默认读者已经能自行将maskrnn-benchmark-master相关环境配置好。</p>
+</blockquote>
+<p>推荐Faster-RCNN学习：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31426458">https://zhuanlan.zhihu.com/p/31426458</a></p>
+<p>推荐Mask-RCNN学习：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/37998710">https://zhuanlan.zhihu.com/p/37998710</a></p>
+<blockquote>
+<p>如下是我已经写好的文章（更新了再补充）：</p>
+<p>maskrcnn-benckmark-master（一）：配置文件</p>
+<p>maskrcnn-benckmark-master（二）：GeneralizedRCNN类</p>
+<p>maskrcnn-benckmark-master（三）：build_backbone()函数</p>
+<p>maskrcnn-benchmark-master（四）：build_rpn()函数</p>
+<p>maskrcnn-benchmark-master（五）：RPN的inference文件</p>
+<p>maskrcnn-benchmark-master（六）：RPN的loss文件</p>
+</blockquote>
+<p>待续~</p>
+
                 
             </div>
             <hr/>
@@ -494,7 +522,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://kingpopen/kingpopen.github.io/contact/index.html">https://kingpopen/kingpopen.github.io/contact/index.html</a>
+                    <a href="https://kingpopen/kingpopen.github.io/2022/05/27/maskrcnn-benckmark-master-ling-dai-ma-jie-du/">https://kingpopen/kingpopen.github.io/2022/05/27/maskrcnn-benckmark-master-ling-dai-ma-jie-du/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -531,7 +559,15 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                    <span class="chip bg-color">深度学习</span>
+                                </a>
+                            
+                                <a href="/tags/MaskRCNN/">
+                                    <span class="chip bg-color">MaskRCNN</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -703,18 +739,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/contact/index.html">
+                <a href="/2022/05/27/maskrcnn-benckmark-master-yi-pei-zhi-wen-jian/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="contact">
+                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="maskrcnn-benckmark-master （一）：配置文件">
                         
-                        <span class="card-title">contact</span>
+                        <span class="card-title">maskrcnn-benckmark-master （一）：配置文件</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -724,9 +759,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-27
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-05-27
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -735,7 +770,18 @@
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">深度学习</span>
+                    </a>
+                    
+                    <a href="/tags/MaskRCNN/">
+                        <span class="chip bg-color">MaskRCNN</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -743,16 +789,16 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/contact/index.html">
+                <a href="/2022/05/27/di-yi-pian-bo-ke/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="contact">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="第一篇博客">
                         
-                        <span class="card-title">contact</span>
+                        <span class="card-title">第一篇博客</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -773,7 +819,18 @@
                         </span>
                     </div>
                 </div>
-
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
+                        <span class="chip bg-color">记录</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%94%9F%E6%B4%BB/">
+                        <span class="chip bg-color">生活</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
