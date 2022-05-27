@@ -4,12 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="maskrcnn-benckmark-master （一）：配置文件, 秋名山翻车的博客">
+    <meta name="keywords" content="maskrcnn-benchmark-master（七）：build_roi_heads()函数, 秋名山翻车的博客">
     <meta name="description" content="前言
-​        作为本系列的开篇，我首先介绍的是配置文件部分，因为整个模型的搭建都和配置文件有很大的关系，所以我们先来了解一下配置文件里面都有啥相关参数配置。
-
-一、配置文件
-maskrcnn-benckmark-master是提供">
+截至上一篇博客，我们已经介绍完RPN的整个流程，RPN的作用是提取Proposals传入ROI_heads部分，然而ROI有哪些heads呢？根据不同的任务，代码分为了box_head，keypoint_head，mask_head。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -23,18 +20,18 @@ maskrcnn-benckmark-master是提供">
 
     
 
-    <title>maskrcnn-benckmark-master （一）：配置文件 | 秋名山翻车的博客</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>maskrcnn-benchmark-master（七）：build_roi_heads()函数 | 秋名山翻车的博客</title>
+    <link rel="icon" type="image/png" href="../../../../favicon.png">
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../css/matery.css">
+    <link rel="stylesheet" type="text/css" href="../../../../css/my.css">
 
-    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+    <script src="../../../../libs/jquery/jquery-3.6.0.min.js"></script>
 
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -46,9 +43,9 @@ maskrcnn-benckmark-master是提供">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
             <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
+                <a href="../../../../index.html" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="../../../../medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">秋名山翻车的博客</span>
                 </a>
@@ -60,7 +57,7 @@ maskrcnn-benckmark-master是提供">
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/" class="waves-effect waves-light">
+    <a href="../../../../index.html" class="waves-effect waves-light">
       
       <i class="fas fa-home" style="zoom: 0.6;"></i>
       
@@ -71,7 +68,7 @@ maskrcnn-benckmark-master是提供">
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/tags" class="waves-effect waves-light">
+    <a href="../../../../tags" class="waves-effect waves-light">
       
       <i class="fas fa-tags" style="zoom: 0.6;"></i>
       
@@ -82,7 +79,7 @@ maskrcnn-benckmark-master是提供">
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/categories" class="waves-effect waves-light">
+    <a href="../../../../categories" class="waves-effect waves-light">
       
       <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
       
@@ -93,7 +90,7 @@ maskrcnn-benckmark-master是提供">
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/archives" class="waves-effect waves-light">
+    <a href="../../../../archives" class="waves-effect waves-light">
       
       <i class="fas fa-archive" style="zoom: 0.6;"></i>
       
@@ -104,33 +101,11 @@ maskrcnn-benckmark-master是提供">
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/about" class="waves-effect waves-light">
+    <a href="../../../../about" class="waves-effect waves-light">
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
       <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>友情链接</span>
     </a>
     
   </li>
@@ -147,7 +122,7 @@ maskrcnn-benckmark-master是提供">
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="../../../../medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">秋名山翻车的博客</div>
         <div class="logo-desc">
@@ -161,7 +136,7 @@ maskrcnn-benckmark-master是提供">
         
         <li class="m-nav-item">
 	  
-		<a href="/" class="waves-effect waves-light">
+		<a href="../../../../index.html" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-home"></i>
 			
@@ -172,7 +147,7 @@ maskrcnn-benckmark-master是提供">
         
         <li class="m-nav-item">
 	  
-		<a href="/tags" class="waves-effect waves-light">
+		<a href="../../../../tags" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-tags"></i>
 			
@@ -183,7 +158,7 @@ maskrcnn-benckmark-master是提供">
         
         <li class="m-nav-item">
 	  
-		<a href="/categories" class="waves-effect waves-light">
+		<a href="../../../../categories" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-bookmark"></i>
 			
@@ -194,7 +169,7 @@ maskrcnn-benckmark-master是提供">
         
         <li class="m-nav-item">
 	  
-		<a href="/archives" class="waves-effect waves-light">
+		<a href="../../../../archives" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-archive"></i>
 			
@@ -205,33 +180,11 @@ maskrcnn-benckmark-master是提供">
         
         <li class="m-nav-item">
 	  
-		<a href="/about" class="waves-effect waves-light">
+		<a href="../../../../about" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			友情链接
 		</a>
           
         </li>
@@ -315,12 +268,12 @@ maskrcnn-benckmark-master是提供">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('../../../../medias/featureimages/11.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">maskrcnn-benckmark-master （一）：配置文件</h1>
+                    <h1 class="description center-align post-title">maskrcnn-benchmark-master（七）：build_roi_heads()函数</h1>
                 </div>
             </div>
         </div>
@@ -333,7 +286,7 @@ maskrcnn-benckmark-master是提供">
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="../../../../libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -436,11 +389,11 @@ maskrcnn-benckmark-master是提供">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                            <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
                                 <span class="chip bg-color">深度学习</span>
                             </a>
                         
-                            <a href="/tags/MaskRCNN/">
+                            <a href="../../../../tags/MaskRCNN/">
                                 <span class="chip bg-color">MaskRCNN</span>
                             </a>
                         
@@ -456,7 +409,7 @@ maskrcnn-benckmark-master是提供">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-05-27
+                    2021-08-02
                 </div>
                 
 
@@ -473,7 +426,7 @@ maskrcnn-benckmark-master是提供">
 
         
         <!-- 是否加载使用自带的 prismjs. -->
-        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        <link rel="stylesheet" href="../../../../libs/prism/prism.min.css">
         
 
         
@@ -481,180 +434,105 @@ maskrcnn-benckmark-master是提供">
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
-<p>​        作为本系列的开篇，我首先介绍的是配置文件部分，因为整个模型的搭建都和配置文件有很大的关系，所以我们先来了解一下配置文件里面都有啥相关参数配置。</p>
+<p>截至上一篇博客，我们已经介绍完RPN的整个流程，RPN的作用是提取Proposals传入ROI_heads部分，然而ROI有哪些heads呢？根据不同的任务，代码分为了box_head，keypoint_head，mask_head。box_head：进行bounding box的回归以及类别的分类任务。</p>
+<p>keypoint_head：进行关键点的检测。（这部分代码我已经从项目中去除掉了）</p>
+<p>mask_head：进行mask的分割任务。</p>
 </blockquote>
-<h3 id="一、配置文件"><a href="#一、配置文件" class="headerlink" title="一、配置文件"></a>一、配置文件</h3><blockquote>
-<p>maskrcnn-benckmark-master是提供有默认的配置的，见文件:<strong>your_project/maskrcnn_benckmark/config/defaults.py</strong></p>
+<h3 id="一、CombinedROIHeads类"><a href="#一、CombinedROIHeads类" class="headerlink" title="一、CombinedROIHeads类"></a>一、CombinedROIHeads类</h3><blockquote>
+<p>接下来我们将开启ROI_heads的介绍篇章，build_roi_heads()函数在your_project/maskrcnn_benchmark/modeling/roi_heads/roi_heads.py文件中，我们打开这个文件,首先引入眼帘的是CombinedROIHeads类，通过这个类的名字，我们易可知这个类的作用是将box_head，keypoint_head，mask_head这几个模块都整合在一起，我们来看一下相关代码（关于keypoint_head的代码我已经删掉了~）：</p>
 </blockquote>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> os
-<span class="token comment"># 通过yacs包来生成的默认配置</span>
-<span class="token keyword">from</span> yacs<span class="token punctuation">.</span>config <span class="token keyword">import</span> CfgNode <span class="token keyword">as</span> CN
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">CombinedROIHeads</span><span class="token punctuation">(</span>torch<span class="token punctuation">.</span>nn<span class="token punctuation">.</span>ModuleDict<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">"""
+    Combines a set of individual heads (for box prediction or masks) into a single
+    head.
+    合并许多个单独的head为一个统一的heads
+    """</span>
+ 
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> cfg<span class="token punctuation">,</span> heads<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span>CombinedROIHeads<span class="token punctuation">,</span> self<span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span>heads<span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>cfg <span class="token operator">=</span> cfg<span class="token punctuation">.</span>clone<span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token comment"># 如果box和mask的head的特征共享，则将box head的features 赋值给mask head</span>
+        <span class="token keyword">if</span> cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>MASK_ON <span class="token keyword">and</span> cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>ROI_MASK_HEAD<span class="token punctuation">.</span>SHARE_BOX_FEATURE_EXTRACTOR<span class="token punctuation">:</span>
+            self<span class="token punctuation">.</span>mask<span class="token punctuation">.</span>feature_extractor <span class="token operator">=</span> self<span class="token punctuation">.</span>box<span class="token punctuation">.</span>feature_extractor
+ 
+    <span class="token keyword">def</span> <span class="token function">forward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> features<span class="token punctuation">,</span> proposals<span class="token punctuation">,</span> targets<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        losses <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+        <span class="token comment"># TODO rename x to roi_box_features, </span>
+        <span class="token comment"># if it doesn't increase memory consumption</span>
+        <span class="token comment"># box head的loss</span>
+        <span class="token comment"># self.box就是一个box_head的对象（后续的博客再介绍） </span>
+        <span class="token comment"># 返回结果是box_head部分提取的特征，detections是检测的结果，loss_box是损失函数</span>
+        x<span class="token punctuation">,</span> detections<span class="token punctuation">,</span> loss_box <span class="token operator">=</span> self<span class="token punctuation">.</span>box<span class="token punctuation">(</span>features<span class="token punctuation">,</span> proposals<span class="token punctuation">,</span> targets<span class="token punctuation">)</span>
+        losses<span class="token punctuation">.</span>update<span class="token punctuation">(</span>loss_box<span class="token punctuation">)</span>
+ 
+        <span class="token comment"># 如果存在mask 分支</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>MASK_ON<span class="token punctuation">:</span>
+            mask_features <span class="token operator">=</span> features
+            <span class="token comment"># optimization: during training, if we share the feature extractor between</span>
+            <span class="token comment"># the box and the mask heads, then we can reuse the features already computed</span>
+            <span class="token comment"># 优化：在训练阶段，如果我们共享了box head 和 mask head的特征提取器， </span>
+            <span class="token comment"># 我们可以重复使用box head所计算的feature用于mask head</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>
+                self<span class="token punctuation">.</span>training
+                <span class="token keyword">and</span> self<span class="token punctuation">.</span>cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>ROI_MASK_HEAD<span class="token punctuation">.</span>SHARE_BOX_FEATURE_EXTRACTOR
+            <span class="token punctuation">)</span><span class="token punctuation">:</span>
+                <span class="token comment"># 如果mask_feature共享box的特征 </span>
+                <span class="token comment"># 就将box_head部分提取的特征赋予mask_features</span>
+                mask_features <span class="token operator">=</span> x
+            <span class="token comment"># During training, self.box() will return the unaltered proposals as "detections"</span>
+            <span class="token comment"># this makes the API consistent during training and testing</span>
+            <span class="token comment"># 训练阶段， self.box() 会返回未经变换的proposals作为检测结果</span>
+            <span class="token comment"># 将mask的的检测结果加入detections中，并计算mask的loss返回。</span>
+            x<span class="token punctuation">,</span> detections<span class="token punctuation">,</span> loss_mask <span class="token operator">=</span> self<span class="token punctuation">.</span>mask<span class="token punctuation">(</span>mask_features<span class="token punctuation">,</span> detections<span class="token punctuation">,</span> targets<span class="token punctuation">)</span>
+            losses<span class="token punctuation">.</span>update<span class="token punctuation">(</span>loss_mask<span class="token punctuation">)</span>
+ 
+        <span class="token keyword">return</span> x<span class="token punctuation">,</span> detections<span class="token punctuation">,</span> losses
  
  
-_C <span class="token operator">=</span> CN<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment"># 从上述代码可以看出box_head和mask_head和之前介绍的rpn_heads很相像，</span>
+<span class="token comment"># 返回的结果都包含有检测的结果和loss</span>
+<span class="token comment"># rpn_head返回:Proposals(相当于RPN检测的bounding box 和类别结果), rpn_loss</span>
+<span class="token comment"># box_head返回:提取的特征x, 检测的bounding box和类别分类结果detections, box_loss</span>
+<span class="token comment"># mask_head返回:提取的特征x, 检测的mask结果并加上之前的box_head的检测结果, mask_loss</span>
+<span class="token comment"># 因此推断box_head对象和mask_head对象中应该也是包含有相应的loss计算文件和inference文件的</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="二、build-roi-heads-函数"><a href="#二、build-roi-heads-函数" class="headerlink" title="二、build_roi_heads()函数"></a>二、build_roi_heads()函数</h3><blockquote>
+<p>接着我们看build_roi_heads()函数的相关代码:</p>
+</blockquote>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 创建roi heads</span>
+<span class="token keyword">def</span> <span class="token function">build_roi_heads</span><span class="token punctuation">(</span>cfg<span class="token punctuation">,</span> in_channels<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># individually create the heads, that will be combined together</span>
+    <span class="token comment"># afterwards</span>
+    roi_heads <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+    <span class="token keyword">if</span> cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>RETINANET_ON<span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
  
-_C<span class="token punctuation">.</span>MODEL <span class="token operator">=</span> CN<span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token comment"># 表示是否只有RPN</span>
-_C<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>RPN_ONLY <span class="token operator">=</span> <span class="token boolean">False</span>
-<span class="token comment"># 表示是否含有Mask分支</span>
-_C<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>MASK_ON <span class="token operator">=</span> <span class="token boolean">False</span>
-_C<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>RETINANET_ON <span class="token operator">=</span> <span class="token boolean">False</span>
-_C<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>KEYPOINT_ON <span class="token operator">=</span> <span class="token boolean">False</span>
-<span class="token comment"># 表示是否使用GPU</span>
-_C<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>DEVICE <span class="token operator">=</span> <span class="token string">"cuda"</span>
-<span class="token comment"># 默认的网络框架</span>
-_C<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>META_ARCHITECTURE <span class="token operator">=</span> <span class="token string">"GeneralizedRCNN"</span>
-_C<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>CLS_AGNOSTIC_BBOX_REG <span class="token operator">=</span> <span class="token boolean">False</span>
+    <span class="token comment"># 根据配置文件依次添加各个head</span>
+    <span class="token keyword">if</span> <span class="token keyword">not</span> cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>RPN_ONLY<span class="token punctuation">:</span>
+        <span class="token comment"># 添加boxes head</span>
+        <span class="token comment"># 通过build_roi_box_head()创建roi_box_head分支</span>
+        roi_heads<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">"box"</span><span class="token punctuation">,</span> build_roi_box_head<span class="token punctuation">(</span>cfg<span class="token punctuation">,</span> in_channels<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>MASK_ON<span class="token punctuation">:</span>
+        <span class="token comment"># 添加mask head</span>
+        <span class="token comment"># 通过build_roi_mask_head()创建roi_mask_head分支</span>
+        roi_heads<span class="token punctuation">.</span>append<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token string">"mask"</span><span class="token punctuation">,</span> build_roi_mask_head<span class="token punctuation">(</span>cfg<span class="token punctuation">,</span> in_channels<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
  
  
-<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    <span class="token comment"># combine individual heads in a single module</span>
+    <span class="token comment"># 将独立的分支进行合并</span>
+    <span class="token keyword">if</span> roi_heads<span class="token punctuation">:</span>
+        roi_heads <span class="token operator">=</span> CombinedROIHeads<span class="token punctuation">(</span>cfg<span class="token punctuation">,</span> roi_heads<span class="token punctuation">)</span>
+ 
+    <span class="token keyword">return</span> roi_heads<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <blockquote>
-<p>那如果我们需要修改相关配置，难道需要在这个defaults.py文件中进行修改吗？</p>
-<p>NO! NO! NO!</p>
-<p>我们其实只要把需要修改的配置写在一个带.yaml后缀的文件中，从而通过这个文件来修改默认的配置，见文件your_project/configs/e2e_mask_rcnn_R_50_FPN_1x.yaml</p>
-<p>下面以e2e_mask_rcnn_R_50_FPN_1x.yaml文件为例 对模型的配置文件进行简单的介绍：</p>
+<p>从build_roi_heads代码可以看出，它主要是通过build_roi_box_head()函数和build_roi_mask_head()函数来生成box_head和mask_head分支，最后通过CombinedROIHeads类将这两个分支进行整合，整体的结构简图如下所示：</p>
 </blockquote>
-<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token comment"># 下面的这些变量（key就可以当做变量，value就是变量的值）都是在default.py都定义好的，</span>
-<span class="token comment"># 下面出现的变量大部分都是需要进行更改的，不需要更改的直接使用默认的就行了，不需要在此处进行配置。</span>
-<span class="token key atrule">MODEL</span><span class="token punctuation">:</span>
-<span class="token comment"># 默认的RCNN网络框架 （代码中会有GeneralizedRCNN类，就是通过传入配置文件来生成模型的）  </span>
-  <span class="token key atrule">META_ARCHITECTURE</span><span class="token punctuation">:</span> <span class="token string">"GeneralizedRCNN"</span>
-<span class="token comment"># 预训练的权重文件</span>
-  <span class="token key atrule">WEIGHT</span><span class="token punctuation">:</span> <span class="token string">"catalog://ImageNetPretrained/MSRA/R-50"</span>
- 
-<span class="token comment"># 骨干网络（CNN特征提取器，官方实现了好几种，下面这种是ResNet-50+FPN）</span>
-  <span class="token key atrule">BACKBONE</span><span class="token punctuation">:</span>
-    <span class="token key atrule">CONV_BODY</span><span class="token punctuation">:</span> <span class="token string">"R-50-FPN"</span>
-<span class="token comment"># ResNets作为特征提取网络的输出的特征维度</span>
-  <span class="token key atrule">RESNETS</span><span class="token punctuation">:</span>
-    <span class="token key atrule">BACKBONE_OUT_CHANNELS</span><span class="token punctuation">:</span> <span class="token number">256</span>
- 
-<span class="token comment"># RPN的配置</span>
-  <span class="token key atrule">RPN</span><span class="token punctuation">:</span>
-    <span class="token comment"># 是否使用FPN（特征金字塔网络）</span>
-    <span class="token key atrule">USE_FPN</span><span class="token punctuation">:</span> <span class="token boolean important">True</span>
-    <span class="token comment"># anchor的配置</span>
-    <span class="token key atrule">ANCHOR_STRIDE</span><span class="token punctuation">:</span> (4<span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">,</span> 64)
-    <span class="token comment"># 用于训练过程的 筛选anchors的数目</span>
-    <span class="token key atrule">PRE_NMS_TOP_N_TRAIN</span><span class="token punctuation">:</span> <span class="token number">2000</span>
-    <span class="token comment"># 用于测试过程的 筛选anchors的数目</span>
-    <span class="token key atrule">PRE_NMS_TOP_N_TEST</span><span class="token punctuation">:</span> <span class="token number">1000</span>
-    <span class="token comment"># 用于测试过程 NMS操作之后留下的Proposals数目</span>
-    <span class="token key atrule">POST_NMS_TOP_N_TEST</span><span class="token punctuation">:</span> <span class="token number">1000</span>
-    <span class="token key atrule">FPN_POST_NMS_TOP_N_TEST</span><span class="token punctuation">:</span> <span class="token number">1000</span>
- 
-<span class="token comment"># ROI_HEADS配置</span>
-  <span class="token key atrule">ROI_HEADS</span><span class="token punctuation">:</span>
-    <span class="token comment"># 是否使用FPN</span>
-    <span class="token key atrule">USE_FPN</span><span class="token punctuation">:</span> <span class="token boolean important">True</span>
-<span class="token comment"># class分类和bounding box回归分支</span>
-  <span class="token key atrule">ROI_BOX_HEAD</span><span class="token punctuation">:</span>
-    <span class="token comment"># ROI Align处理之后所生成的维度</span>
-    <span class="token key atrule">POOLER_RESOLUTION</span><span class="token punctuation">:</span> <span class="token number">7</span>
-    <span class="token comment"># 下面这几个参数还没搞明白 后续再补上~</span>
-    <span class="token key atrule">POOLER_SCALES</span><span class="token punctuation">:</span> (0.25<span class="token punctuation">,</span> <span class="token number">0.125</span><span class="token punctuation">,</span> <span class="token number">0.0625</span><span class="token punctuation">,</span> 0.03125)
-    <span class="token key atrule">POOLER_SAMPLING_RATIO</span><span class="token punctuation">:</span> <span class="token number">2</span>
-    <span class="token comment"># 特征提取器（对ROI Align之后的结果进行特征提取）</span>
-    <span class="token key atrule">FEATURE_EXTRACTOR</span><span class="token punctuation">:</span> <span class="token string">"FPN2MLPFeatureExtractor"</span>
-    <span class="token comment"># 预测器 （主要是使用全连接层进行 分类和回归）</span>
-    <span class="token key atrule">PREDICTOR</span><span class="token punctuation">:</span> <span class="token string">"FPNPredictor"</span>
-  <span class="token comment"># mask分割的分支</span>
-  <span class="token key atrule">ROI_MASK_HEAD</span><span class="token punctuation">:</span>
-    <span class="token comment"># 下面这几个参数还没搞明白 后续再补上~</span>
-    <span class="token key atrule">POOLER_SCALES</span><span class="token punctuation">:</span> (0.25<span class="token punctuation">,</span> <span class="token number">0.125</span><span class="token punctuation">,</span> <span class="token number">0.0625</span><span class="token punctuation">,</span> 0.03125)
-    <span class="token comment"># 特征提取器（对ROI Align之后的结果进行特征提取）</span>
-    <span class="token key atrule">FEATURE_EXTRACTOR</span><span class="token punctuation">:</span> <span class="token string">"MaskRCNNFPNFeatureExtractor"</span>
-    <span class="token comment"># 预测器 （主要是生成mask）</span>
-    <span class="token key atrule">PREDICTOR</span><span class="token punctuation">:</span> <span class="token string">"MaskRCNNC4Predictor"</span>
-    <span class="token comment"># 下面这几个参数还没搞明白 后续再补上~</span>
-    <span class="token key atrule">POOLER_RESOLUTION</span><span class="token punctuation">:</span> <span class="token number">14</span>
-    <span class="token key atrule">POOLER_SAMPLING_RATIO</span><span class="token punctuation">:</span> <span class="token number">2</span>
-    <span class="token key atrule">RESOLUTION</span><span class="token punctuation">:</span> <span class="token number">28</span>
-    <span class="token comment"># 是否使用ROI BOX HEAD特征提取器提取好的特征</span>
-    <span class="token key atrule">SHARE_BOX_FEATURE_EXTRACTOR</span><span class="token punctuation">:</span> <span class="token boolean important">False</span>
-  <span class="token key atrule">MASK_ON</span><span class="token punctuation">:</span> <span class="token boolean important">True</span>
- 
-<span class="token comment"># 数据集的名称</span>
-<span class="token key atrule">DATASETS</span><span class="token punctuation">:</span>
-  <span class="token key atrule">TRAIN</span><span class="token punctuation">:</span> ("coco_2014_train"<span class="token punctuation">,</span> "coco_2014_valminusminival")
-  <span class="token key atrule">TEST</span><span class="token punctuation">:</span> ("coco_2014_minival"<span class="token punctuation">,</span>)
- 
-<span class="token comment"># 数据集的Dataloader配置（用来读取数据集）</span>
-<span class="token key atrule">DATALOADER</span><span class="token punctuation">:</span>
-  <span class="token key atrule">SIZE_DIVISIBILITY</span><span class="token punctuation">:</span> <span class="token number">32</span>
- 
-<span class="token comment"># 相关训练参数配置</span>
-<span class="token key atrule">SOLVER</span><span class="token punctuation">:</span>
-  <span class="token key atrule">BASE_LR</span><span class="token punctuation">:</span> <span class="token number">0.02</span>
-  <span class="token key atrule">WEIGHT_DECAY</span><span class="token punctuation">:</span> <span class="token number">0.0001</span>
-  <span class="token key atrule">STEPS</span><span class="token punctuation">:</span> (60000<span class="token punctuation">,</span> 80000)
-  <span class="token key atrule">MAX_ITER</span><span class="token punctuation">:</span> <span class="token number">90000</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<p><img src="1.jpg" alt="图1 ROI heads结构图"></p>
 <blockquote>
-<p>整体的GeneralizedRCNN 结构如下图所示（绘画水平有限orz），可以依照下图的模块去看相应的配置，需要配置的模块主要是：<strong>Backbone、RPN、ROI Heads(包括ROI Box head 和 ROI Mask head)</strong> 。</p>
-</blockquote>
-<p><img src="GeneralizedRCNN%E7%BB%93%E6%9E%84%E5%9B%BE.jpg" alt="图1 GeneralizedRCNN结构图"></p>
-<h3 id="二、配置文件的使用"><a href="#二、配置文件的使用" class="headerlink" title="二、配置文件的使用"></a>二、配置文件的使用</h3><blockquote>
-<p>​        配置文件主要是在your_project/tools/train_net.py中进行调用,首先看到train_net.py中的main函数:</p>
-</blockquote>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    parser <span class="token operator">=</span> argparse<span class="token punctuation">.</span>ArgumentParser<span class="token punctuation">(</span>description<span class="token operator">=</span><span class="token string">"PyTorch Object Detection Training"</span><span class="token punctuation">)</span>
-    
-    <span class="token comment"># 配置文件(带有.yaml后缀的配置文件作为命令行参数输入)</span>
-    parser<span class="token punctuation">.</span>add_argument<span class="token punctuation">(</span>
-        <span class="token string">"--config-file"</span><span class="token punctuation">,</span>
-        default<span class="token operator">=</span><span class="token string">""</span><span class="token punctuation">,</span>
-        metavar<span class="token operator">=</span><span class="token string">"FILE"</span><span class="token punctuation">,</span>
-        <span class="token builtin">help</span><span class="token operator">=</span><span class="token string">"path to config file"</span><span class="token punctuation">,</span>
-        <span class="token builtin">type</span><span class="token operator">=</span><span class="token builtin">str</span><span class="token punctuation">,</span>
-    <span class="token punctuation">)</span>
- 
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token comment"># 将配置文件进行读取</span>
-    cfg<span class="token punctuation">.</span>merge_from_file<span class="token punctuation">(</span>args<span class="token punctuation">.</span>config_file<span class="token punctuation">)</span>
-    cfg<span class="token punctuation">.</span>merge_from_list<span class="token punctuation">(</span>args<span class="token punctuation">.</span>opts<span class="token punctuation">)</span>
-    cfg<span class="token punctuation">.</span>freeze<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token comment"># 将配置对象 cfg 作为参数传入train()函数</span>
-    model <span class="token operator">=</span> train<span class="token punctuation">(</span>cfg<span class="token punctuation">,</span> args<span class="token punctuation">.</span>local_rank<span class="token punctuation">,</span> args<span class="token punctuation">.</span>distributed<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>接着我们在train_net.py中找到train()函数:</p>
-</blockquote>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">train</span><span class="token punctuation">(</span>cfg<span class="token punctuation">,</span> local_rank<span class="token punctuation">,</span> distributed<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token comment"># 根据配置文件来创建模型 (发现cfg被传到了build_detection_model()函数中)</span>
-    model <span class="token operator">=</span> build_detection_model<span class="token punctuation">(</span>cfg<span class="token punctuation">)</span>
-    device <span class="token operator">=</span> torch<span class="token punctuation">.</span>device<span class="token punctuation">(</span>cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>DEVICE<span class="token punctuation">)</span>
-    model<span class="token punctuation">.</span>to<span class="token punctuation">(</span>device<span class="token punctuation">)</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>​        cfg对象传入到了build_detection_model()函数中，这应该是一个利用配置来构建模型的函数，我们来看看这个函数里面都写了些啥：</p>
-</blockquote>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> <span class="token punctuation">.</span>generalized_rcnn <span class="token keyword">import</span> GeneralizedRCNN
- 
-<span class="token comment"># 一个字典</span>
-_DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token string">"GeneralizedRCNN"</span><span class="token punctuation">:</span> GeneralizedRCNN<span class="token punctuation">}</span>
- 
- 
-<span class="token keyword">def</span> <span class="token function">build_detection_model</span><span class="token punctuation">(</span>cfg<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token comment"># 默认的cfg.MODEL.META_ARCHITECTURE都是GeneralizedRCNN</span>
-    meta_arch <span class="token operator">=</span> _DETECTION_META_ARCHITECTURES<span class="token punctuation">[</span>cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>META_ARCHITECTURE<span class="token punctuation">]</span>
-    <span class="token comment"># 相当于 return GeneralizedRCNN(cfg)</span>
-    <span class="token keyword">return</span> meta_arch<span class="token punctuation">(</span>cfg<span class="token punctuation">)</span>
- <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<blockquote>
-<p>其实可以看出build_detection_model()函数就是将cfg对象又作为参数，传到了GeneralizedRCNN类的init函数中，返回一个GeneralizedRCNN类对象，这个对象就是我们所定义的模型。</p>
-<p>那么GeneraliziedRCNN类中究竟执行了哪些过程呢？它如何构建我们的Mask-RCNN模型的？</p>
-<p>请阅读：maskrcnn-benchmark-master（二）：GeneraliziedRCNN类</p>
-<p>码字不易，未经许可，请勿随意转载！</p>
+<p>build_roi_box_head（）函数将放在下一篇博客介绍:</p>
+<p>maskrcnn-benchmark-master（八）：build_roi_box_head()函数</p>
+<p>build_roi_mask_head（）函数待续~</p>
 </blockquote>
 
                 
@@ -672,7 +550,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">秋名山翻车的</a>
+                    <a href="../../../../about" rel="external nofollow noreferrer">秋名山翻车的</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -682,7 +560,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://kingpopen/kingpopen.github.io/2022/05/27/maskrcnn-benckmark-master-yi-pei-zhi-wen-jian/">https://kingpopen/kingpopen.github.io/2022/05/27/maskrcnn-benckmark-master-yi-pei-zhi-wen-jian/</a>
+                    <a href="https://kingpopen/kingpopen.github.io">https://kingpopen/kingpopen.github.io</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -695,7 +573,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="/about" target="_blank">秋名山翻车的</a>
+                    <a href="../../../../about" target="_blank">秋名山翻车的</a>
                     !
                 </span>
             </div>
@@ -720,11 +598,11 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
                                     <span class="chip bg-color">深度学习</span>
                                 </a>
                             
-                                <a href="/tags/MaskRCNN/">
+                                <a href="../../../../tags/MaskRCNN/">
                                     <span class="chip bg-color">MaskRCNN</span>
                                 </a>
                             
@@ -732,12 +610,12 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="../../../../libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
+    <script src="../../../../libs/share/js/social-share.min.js"></script>
     
 
     
@@ -855,10 +733,10 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                         <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
                     </ul>
                     <div id="alipay">
-                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                        <img src="../../../../medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
                     </div>
                     <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                        <img src="../../../../medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
                     </div>
                 </div>
             </div>
@@ -903,13 +781,13 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/05/27/maskrcnn-benckmark-master-er-generalizedrcnn-lei/">
+                <a href="../maskrcnn-benchmark-master-ba-build-roi-box-head-han-shu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="maskrcnn-benckmark-master （二）：GeneralizedRCNN类">
+                        <img src="../../../../medias/featureimages/22.jpg" class="responsive-img" alt="maskrcnn-benchmark-master（八）：build_roi_box_head()函数">
                         
-                        <span class="card-title">maskrcnn-benckmark-master （二）：GeneralizedRCNN类</span>
+                        <span class="card-title">maskrcnn-benchmark-master（八）：build_roi_box_head()函数</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -920,7 +798,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-05-27
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-08-02
                         </span>
                         <span class="publish-author">
                             
@@ -933,11 +811,11 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                    <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
                         <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/MaskRCNN/">
+                    <a href="../../../../tags/MaskRCNN/">
                         <span class="chip bg-color">MaskRCNN</span>
                     </a>
                     
@@ -952,13 +830,13 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/05/27/maskrcnn-benckmark-master-ling-dai-ma-jie-du/">
+                <a href="../../01/maskrcnn-benchmark-master-liu-rpn-de-loss-wen-jian/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="maskrcnn-benckmark-master （零）：代码解读">
+                        <img src="../../../../medias/featureimages/10.jpg" class="responsive-img" alt="maskrcnn-benchmark-master（六）：RPN的loss文件">
                         
-                        <span class="card-title">maskrcnn-benckmark-master （零）：代码解读</span>
+                        <span class="card-title">maskrcnn-benchmark-master（六）：RPN的loss文件</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -969,7 +847,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-27
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-01
                             </span>
                         <span class="publish-author">
                             
@@ -982,11 +860,11 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                    <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
                         <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/MaskRCNN/">
+                    <a href="../../../../tags/MaskRCNN/">
                         <span class="chip bg-color">MaskRCNN</span>
                     </a>
                     
@@ -1003,26 +881,26 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="../../../../libs/codeBlock/codeBlockFuction.js"></script>
 
 
   <!-- 是否加载使用自带的 prismjs. -->
-  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+  <script type="text/javascript" src="../../../../libs/prism/prism.min.js"></script>
 
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="../../../../libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="../../../../libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="../../../../libs/codeBlock/codeShrink.js"></script>
 
 
 
@@ -1044,7 +922,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
 </div>
 
 
-<script src="/libs/tocbot/tocbot.min.js"></script>
+<script src="../../../../libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1116,7 +994,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+        <link rel="stylesheet" href="../../../../libs/aplayer/APlayer.min.css">
 <style>
     .aplayer .aplayer-lrc p {
         
@@ -1152,22 +1030,22 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
         <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
                    server="netease"
                    type="playlist"
-                   id="503838841"
+                   id="824543813"
                    fixed='true'
                    autoplay='false'
                    theme='#42b983'
                    loop='all'
                    order='random'
                    preload='auto'
-                   volume='0.7'
+                   volume='0.5'
                    list-folded='true'
         >
         </meting-js>
     </div>
 </div>
 
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="/libs/aplayer/Meting.min.js"></script>
+<script src="../../../../libs/aplayer/APlayer.min.js"></script>
+<script src="../../../../libs/aplayer/Meting.min.js"></script>
 
     
 	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" 
@@ -1181,7 +1059,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
             
                 <span id="year">2019-2022</span>
             
-            <a href="/about" target="_blank">秋名山翻车的</a>
+            <a href="../../../../about" target="_blank">秋名山翻车的</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
@@ -1210,13 +1088,13 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <a href="https://github.com/kingpopen" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
 
 
 
-    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:kingpopen@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1226,7 +1104,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1257022178" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1257022178" data-position="top" data-delay="50">
         <i class="fab fa-qq"></i>
     </a>
 
@@ -1236,7 +1114,7 @@ _DETECTION_META_ARCHITECTURES <span class="token operator">=</span> <span class=
 
 
 
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+    <a href="../../../../atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
 
@@ -1347,7 +1225,7 @@ $(function () {
         });
     };
 
-    searchFunc('/search.xml', 'searchInput', 'searchResult');
+    searchFunc('../../../../search.xml', 'searchInput', 'searchResult');
 });
 </script>
 
@@ -1359,12 +1237,12 @@ $(function () {
 </div>
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
+    <script src="../../../../libs/materialize/materialize.min.js"></script>
+    <script src="../../../../libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="../../../../libs/aos/aos.js"></script>
+    <script src="../../../../libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="../../../../libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="../../../../js/matery.js"></script>
 
     
 
@@ -1378,7 +1256,7 @@ $(function () {
 
      
         <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
-        <script src="/libs/others/TencentCaptcha.js"></script>
+        <script src="../../../../libs/others/TencentCaptcha.js"></script>
         <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
     
 
@@ -1401,10 +1279,10 @@ $(function () {
 </script>
 
     
-    <script src="/libs/others/clicklove.js" async="async"></script>
+    <script src="../../../../libs/others/clicklove.js" async="async"></script>
     
     
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="../../../../libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1420,7 +1298,7 @@ $(function () {
     
 
     
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="../../../../libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

@@ -4,9 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="maskrcnn-benckmark-master （零）：代码解读, 秋名山翻车的博客">
+    <meta name="keywords" content="maskrcnn-benchmark-master（三）：build_backbone()函数, 秋名山翻车的博客">
     <meta name="description" content="前言
-之前一直都有使用Mask-RCNN模型，从一开始使用的MMDetection2框架中的Mask-RCNN，能够比较正常的运行，但是想要修改成我需要的形式时，发现MMDetection2中有一些地方都已经模块化好了，不方便修改，于是便转">
+通过之前的介绍，我们知道build_backbone()函数的作用就是生成一个backbone（backbone的作用就是提取图像特征）。其实本身build_backbone（）函数当中没有多少好讲的，但里面用到了一个registry">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -20,18 +20,18 @@
 
     
 
-    <title>maskrcnn-benckmark-master （零）：代码解读 | 秋名山翻车的博客</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <title>maskrcnn-benchmark-master（三）：build_backbone()函数 | 秋名山翻车的博客</title>
+    <link rel="icon" type="image/png" href="../../../../favicon.png">
 
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/awesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../css/matery.css">
+    <link rel="stylesheet" type="text/css" href="../../../../css/my.css">
 
-    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+    <script src="../../../../libs/jquery/jquery-3.6.0.min.js"></script>
 
 <meta name="generator" content="Hexo 6.2.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -43,9 +43,9 @@
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
             <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
+                <a href="../../../../index.html" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="../../../../medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">秋名山翻车的博客</span>
                 </a>
@@ -57,7 +57,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/" class="waves-effect waves-light">
+    <a href="../../../../index.html" class="waves-effect waves-light">
       
       <i class="fas fa-home" style="zoom: 0.6;"></i>
       
@@ -68,7 +68,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/tags" class="waves-effect waves-light">
+    <a href="../../../../tags" class="waves-effect waves-light">
       
       <i class="fas fa-tags" style="zoom: 0.6;"></i>
       
@@ -79,7 +79,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/categories" class="waves-effect waves-light">
+    <a href="../../../../categories" class="waves-effect waves-light">
       
       <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
       
@@ -90,7 +90,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/archives" class="waves-effect waves-light">
+    <a href="../../../../archives" class="waves-effect waves-light">
       
       <i class="fas fa-archive" style="zoom: 0.6;"></i>
       
@@ -101,33 +101,11 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/about" class="waves-effect waves-light">
+    <a href="../../../../about" class="waves-effect waves-light">
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
       <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
-      
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
-      
-      <span>留言板</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/friends" class="waves-effect waves-light">
-      
-      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
-      
-      <span>友情链接</span>
     </a>
     
   </li>
@@ -144,7 +122,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="../../../../medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">秋名山翻车的博客</div>
         <div class="logo-desc">
@@ -158,7 +136,7 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/" class="waves-effect waves-light">
+		<a href="../../../../index.html" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-home"></i>
 			
@@ -169,7 +147,7 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/tags" class="waves-effect waves-light">
+		<a href="../../../../tags" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-tags"></i>
 			
@@ -180,7 +158,7 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/categories" class="waves-effect waves-light">
+		<a href="../../../../categories" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-bookmark"></i>
 			
@@ -191,7 +169,7 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/archives" class="waves-effect waves-light">
+		<a href="../../../../archives" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-archive"></i>
 			
@@ -202,33 +180,11 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/about" class="waves-effect waves-light">
+		<a href="../../../../about" class="waves-effect waves-light">
 			
 			    <i class="fa-fw fas fa-user-circle"></i>
 			
 			关于
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/friends" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-address-book"></i>
-			
-			友情链接
 		</a>
           
         </li>
@@ -312,12 +268,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('../../../../medias/featureimages/4.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">maskrcnn-benckmark-master （零）：代码解读</h1>
+                    <h1 class="description center-align post-title">maskrcnn-benchmark-master（三）：build_backbone()函数</h1>
                 </div>
             </div>
         </div>
@@ -330,7 +286,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="../../../../libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -433,11 +389,11 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                            <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
                                 <span class="chip bg-color">深度学习</span>
                             </a>
                         
-                            <a href="/tags/MaskRCNN/">
+                            <a href="../../../../tags/MaskRCNN/">
                                 <span class="chip bg-color">MaskRCNN</span>
                             </a>
                         
@@ -453,7 +409,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-05-27
+                    2021-07-27
                 </div>
                 
 
@@ -470,32 +426,146 @@
 
         
         <!-- 是否加载使用自带的 prismjs. -->
-        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        <link rel="stylesheet" href="../../../../libs/prism/prism.min.css">
         
 
         
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
-<p>之前一直都有使用Mask-RCNN模型，从一开始使用的MMDetection2框架中的Mask-RCNN，能够比较正常的运行，但是想要修改成我需要的形式时，发现MMDetection2中有一些地方都已经模块化好了，不方便修改，于是便转战到现在的maskrcnn-benckmark-master这个版本。</p>
-<p>前段时间是有把maskrcnn-benckmark-master都阅读一遍，并按照了自己的需求修改了网络结构，但是现在又要修改其他部分，发现关于代码细节，我以及记不得太清楚了orz。想到好久都没有更新博客了，于是便决定记录一下第二次学习这个代码的过程，希望对同样想学习相关代码的朋友有所帮助，如果有理解有误的地方，还请评论区拍砖~</p>
+                <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<p>通过之前的介绍，我们知道build_backbone()函数的作用就是生成一个backbone（backbone的作用就是提取图像特征）。其实本身build_backbone（）函数当中没有多少好讲的，但里面用到了一个registry的类，其他的好多函数中都有用到这个类，所以registry就放到本篇博客中一起介绍。</p>
 </blockquote>
-<h3 id="一、介绍"><a href="#一、介绍" class="headerlink" title="一、介绍"></a>一、介绍</h3><blockquote>
-<p>因为本系列的文章是介绍maskrcnn-benchmark-master的网络构建的一些代码，方便根据这个项目将其修改成自己所需要的形式，所以在阅读本系列文章时，需要提前对Faster-RCNN、Mask-RCNN模型本身的一些细节有一个大致的了解，并默认读者已经能自行将maskrnn-benchmark-master相关环境配置好。</p>
+<h3 id="一、Registry"><a href="#一、Registry" class="headerlink" title="一、Registry"></a>一、Registry</h3><blockquote>
+<p>build_backbone（）函数是在<strong>your_project/maskrcnn_benchmark/modeling/backbone/backbone.py</strong>文件中，当打开这个backbone.py这个文件，就会发现有好多如下代码：</p>
 </blockquote>
-<p>推荐Faster-RCNN学习：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31426458">https://zhuanlan.zhihu.com/p/31426458</a></p>
-<p>推荐Mask-RCNN学习：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/37998710">https://zhuanlan.zhihu.com/p/37998710</a></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> maskrcnn_benchmark<span class="token punctuation">.</span>modeling <span class="token keyword">import</span> registry
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token decorator annotation punctuation">@registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"R-50-C4"</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"R-50-C5"</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"R-101-C4"</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"R-101-C5"</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 <blockquote>
-<p>如下是我已经写好的文章（更新了再补充）：</p>
-<p>maskrcnn-benckmark-master（一）：配置文件</p>
-<p>maskrcnn-benckmark-master（二）：GeneralizedRCNN类</p>
-<p>maskrcnn-benckmark-master（三）：build_backbone()函数</p>
-<p>maskrcnn-benchmark-master（四）：build_rpn()函数</p>
-<p>maskrcnn-benchmark-master（五）：RPN的inference文件</p>
-<p>maskrcnn-benchmark-master（六）：RPN的loss文件</p>
+<p>那么接下来我就要好好了解一下，registry究竟是一个什么？</p>
+<p>Registry类是在your_project/maskrcnn_benchmark/utils/registry.py文件中进行定义的：</p>
 </blockquote>
-<p>待续~</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">_register_generic</span><span class="token punctuation">(</span>module_dict<span class="token punctuation">,</span> module_name<span class="token punctuation">,</span> module<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> module_name <span class="token keyword">not</span> <span class="token keyword">in</span> module_dict
+    module_dict<span class="token punctuation">[</span>module_name<span class="token punctuation">]</span> <span class="token operator">=</span> module
+ 
+ 
+<span class="token keyword">class</span> <span class="token class-name">Registry</span><span class="token punctuation">(</span><span class="token builtin">dict</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token triple-quoted-string string">'''
+    A helper class for managing registering modules, it extends a dictionary
+    and provides a register functions.
+    Eg. creeting a registry:
+        some_registry = Registry({"default": default_module})
+    There're two ways of registering new modules:
+    1): normal way is just calling register function:
+        def foo():
+            ...
+        some_registry.register("foo_module", foo)
+    2): used as decorator when declaring the module:
+        @some_registry.register("foo_module")
+        @some_registry.register("foo_module_nickname")
+        def foo():
+            ...
+    Access of module is just like using a dictionary, eg:
+        f = some_registry["foo_module"]
+    '''</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> <span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span>Registry<span class="token punctuation">,</span> self<span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token operator">*</span>args<span class="token punctuation">,</span> <span class="token operator">**</span>kwargs<span class="token punctuation">)</span>
+    <span class="token comment"># 就是一个装饰器</span>
+    <span class="token keyword">def</span> <span class="token function">register</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> module_name<span class="token punctuation">,</span> module<span class="token operator">=</span><span class="token boolean">None</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># used as function call</span>
+        <span class="token keyword">if</span> module <span class="token keyword">is</span> <span class="token keyword">not</span> <span class="token boolean">None</span><span class="token punctuation">:</span>
+            <span class="token comment"># 该函数是将module_name 和 moudle 以key 和 value 的形式加到字典当中去</span>
+            _register_generic<span class="token punctuation">(</span>self<span class="token punctuation">,</span> module_name<span class="token punctuation">,</span> module<span class="token punctuation">)</span>
+            <span class="token keyword">return</span>
+ 
+        <span class="token comment"># used as decorator</span>
+        <span class="token keyword">def</span> <span class="token function">register_fn</span><span class="token punctuation">(</span>fn<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            _register_generic<span class="token punctuation">(</span>self<span class="token punctuation">,</span> module_name<span class="token punctuation">,</span> fn<span class="token punctuation">)</span>
+            <span class="token keyword">return</span> fn
+ 
+        <span class="token keyword">return</span> register_fn<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>我来给大家 <strong>翻译 翻译</strong> 上面一大段的函数相关介绍注释 都说了写啥：</p>
+</blockquote>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"> 
+Registry是一个用来管理注册模块的helper类，它继承了一个字典类，并且添加了register方法。
+举一个如何使用的例子：
+<span class="token number">1</span>、创建一个registry对象
+    some_registry <span class="token operator">=</span> Registry<span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token punctuation">(</span>有没有参数都可以<span class="token punctuation">)</span>
+<span class="token number">2</span>、注册新的模块 （有两种方式）
+   方式一：正常的方式是调用register函数进行注册：
+         <span class="token comment"># 首先定义一个模块 foo</span>
+         <span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+             <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+         <span class="token comment"># 然后在registry对象上注册它  </span>
+         <span class="token comment"># foo_module相当于字典的key，foo相当于字典的value(简单吧 hhh)</span>
+         some_registry<span class="token punctuation">.</span>register<span class="token punctuation">(</span><span class="token string">"foo_module"</span><span class="token punctuation">,</span> foo<span class="token punctuation">)</span>
+   方式二：在声明某个模块时，作为一个装饰器使用：
+         <span class="token decorator annotation punctuation">@some_registry<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"foo_module"</span><span class="token punctuation">)</span>
+         <span class="token decorator annotation punctuation">@some_registry<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"foo_module_nickname"</span><span class="token punctuation">)</span>
+          <span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+              <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+         <span class="token comment"># 效果等同于  ：some_registry.register("foo_module", foo)</span>
+         <span class="token comment">#              some_registry.register("foo_module_nickname", foo)</span>
+ <span class="token number">3</span>、获取被注册的模块<span class="token punctuation">(</span>像使用字典一样<span class="token punctuation">)</span>
+      f <span class="token operator">=</span> some_registry<span class="token punctuation">[</span><span class="token string">"foo_module"</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="二、Backbone"><a href="#二、Backbone" class="headerlink" title="二、Backbone"></a>二、Backbone</h3><blockquote>
+<p>好！有了上面Registry的介绍，我再来看看backbone.py文件就会轻松很多。在backbone.py中registry大都是通过方式二：作为一种装饰器使用的，如下例：</p>
+</blockquote>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token comment"># 相当于在BACKBONES的字典中注册了"R-50-C4"、"R-50-C5"、"R-101-C4"、"R-101-C5"这几个key </span>
+<span class="token comment"># 它们对应的value都是 build_resnet_backbone()这个函数</span>
+<span class="token decorator annotation punctuation">@registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"R-50-C4"</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"R-50-C5"</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"R-101-C4"</span><span class="token punctuation">)</span>
+<span class="token decorator annotation punctuation">@registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">.</span>register</span><span class="token punctuation">(</span><span class="token string">"R-101-C5"</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">build_resnet_backbone</span><span class="token punctuation">(</span>cfg<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># 通过cfg来决定resnet是50还是101</span>
+    body <span class="token operator">=</span> resnet<span class="token punctuation">.</span>ResNet<span class="token punctuation">(</span>cfg<span class="token punctuation">)</span>
+    model <span class="token operator">=</span> nn<span class="token punctuation">.</span>Sequential<span class="token punctuation">(</span>OrderedDict<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token punctuation">(</span><span class="token string">"body"</span><span class="token punctuation">,</span> body<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token comment"># 通过cfg来决定输出是C4还是C5</span>
+    model<span class="token punctuation">.</span>out_channels <span class="token operator">=</span> cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>RESNETS<span class="token punctuation">.</span>BACKBONE_OUT_CHANNELS
+    <span class="token keyword">return</span> model
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token comment"># 后面的几个都是类似的情况，就不一一展开了~</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>我们接着看到build_backbone(cfg)函数，它就是返回backbone的函数：</p>
+</blockquote>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">build_backbone</span><span class="token punctuation">(</span>cfg<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">assert</span> cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>BACKBONE<span class="token punctuation">.</span>CONV_BODY <span class="token keyword">in</span> registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">,</span> \
+        <span class="token string">"cfg.MODEL.BACKBONE.CONV_BODY: {} are not registered in registry"</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>
+            cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>BACKBONE<span class="token punctuation">.</span>CONV_BODY
+        <span class="token punctuation">)</span>
+    <span class="token comment"># backbone的类型通过配置文件中的CONV_BODY来决定</span>
+    <span class="token comment"># registry.BACKBONES[***]是获取对应的注册器字典中的value (当前场景中value是一个函数)</span>
+    <span class="token comment"># 然后对获取的函数输入形参cfg  返回一个backbone模型对象。</span>
+    ···
+      <span class="token comment"># 等价于如下</span>
+      foo <span class="token operator">=</span> registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">[</span>cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>BACKBONE<span class="token punctuation">.</span>CONV_BODY<span class="token punctuation">]</span>
+      backbone <span class="token operator">=</span> foo<span class="token punctuation">(</span>cfg<span class="token punctuation">)</span>
+      <span class="token keyword">return</span> backbone 
+    ···
+<span class="token keyword">return</span> registry<span class="token punctuation">.</span>BACKBONES<span class="token punctuation">[</span>cfg<span class="token punctuation">.</span>MODEL<span class="token punctuation">.</span>BACKBONE<span class="token punctuation">.</span>CONV_BODY<span class="token punctuation">]</span><span class="token punctuation">(</span>cfg<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<blockquote>
+<p>至此backbone的获取过程就介绍完了，本篇内容并没有涉及到backbone中ResNet网络，FPN网络是如何构造的，如果需要了解相关细节，可以查看其源代码。</p>
+<p>本篇只是简单介绍了整个build_backbone（）函数的调用过程，既然已经构造好了backbone，那么接下来就是构造RPN，下面一篇将介绍RPN的构造。</p>
+<p>maskrcnn-benchmark-master（四）：build_rpn()函数</p>
+</blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/RadiantJeral/article/details/103433169">https://blog.csdn.net/RadiantJeral/article/details/103433169</a></p>
 
                 
             </div>
@@ -512,7 +582,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="/about" rel="external nofollow noreferrer">秋名山翻车的</a>
+                    <a href="../../../../about" rel="external nofollow noreferrer">秋名山翻车的</a>
                 </span>
             </div>
             <div class="reprint__type">
@@ -522,7 +592,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://kingpopen/kingpopen.github.io/2022/05/27/maskrcnn-benckmark-master-ling-dai-ma-jie-du/">https://kingpopen/kingpopen.github.io/2022/05/27/maskrcnn-benckmark-master-ling-dai-ma-jie-du/</a>
+                    <a href="https://kingpopen/kingpopen.github.io">https://kingpopen/kingpopen.github.io</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -535,7 +605,7 @@
                     本博客所有文章除特別声明外，均采用
                     <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
                     许可协议。转载请注明来源
-                    <a href="/about" target="_blank">秋名山翻车的</a>
+                    <a href="../../../../about" target="_blank">秋名山翻车的</a>
                     !
                 </span>
             </div>
@@ -560,11 +630,11 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                                <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
                                     <span class="chip bg-color">深度学习</span>
                                 </a>
                             
-                                <a href="/tags/MaskRCNN/">
+                                <a href="../../../../tags/MaskRCNN/">
                                     <span class="chip bg-color">MaskRCNN</span>
                                 </a>
                             
@@ -572,12 +642,12 @@
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="../../../../libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="/libs/share/js/social-share.min.js"></script>
+    <script src="../../../../libs/share/js/social-share.min.js"></script>
     
 
     
@@ -695,10 +765,10 @@
                         <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
                     </ul>
                     <div id="alipay">
-                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                        <img src="../../../../medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
                     </div>
                     <div id="wechat">
-                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                        <img src="../../../../medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
                     </div>
                 </div>
             </div>
@@ -743,13 +813,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/05/27/maskrcnn-benckmark-master-yi-pei-zhi-wen-jian/">
+                <a href="../maskrcnn-benchmark-master-si-build-rpn-han-shu/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="maskrcnn-benckmark-master （一）：配置文件">
+                        <img src="../../../../medias/featureimages/19.jpg" class="responsive-img" alt="maskrcnn-benchmark-master（四）：build_rpn()函数">
                         
-                        <span class="card-title">maskrcnn-benckmark-master （一）：配置文件</span>
+                        <span class="card-title">maskrcnn-benchmark-master（四）：build_rpn()函数</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -760,7 +830,7 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-05-27
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-27
                         </span>
                         <span class="publish-author">
                             
@@ -773,11 +843,11 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                    <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
                         <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/MaskRCNN/">
+                    <a href="../../../../tags/MaskRCNN/">
                         <span class="chip bg-color">MaskRCNN</span>
                     </a>
                     
@@ -792,13 +862,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/05/27/di-yi-pian-bo-ke/">
+                <a href="../maskrcnn-benckmark-master-er-generalizedrcnn-lei/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="第一篇博客">
+                        <img src="../../../../medias/featureimages/16.jpg" class="responsive-img" alt="maskrcnn-benckmark-master （二）：GeneralizedRCNN类">
                         
-                        <span class="card-title">第一篇博客</span>
+                        <span class="card-title">maskrcnn-benckmark-master （二）：GeneralizedRCNN类</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -809,7 +879,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-05-27
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-27
                             </span>
                         <span class="publish-author">
                             
@@ -822,12 +892,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
+                    <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">深度学习</span>
                     </a>
                     
-                    <a href="/tags/%E7%94%9F%E6%B4%BB/">
-                        <span class="chip bg-color">生活</span>
+                    <a href="../../../../tags/MaskRCNN/">
+                        <span class="chip bg-color">MaskRCNN</span>
                     </a>
                     
                 </div>
@@ -843,26 +913,26 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="../../../../libs/codeBlock/codeBlockFuction.js"></script>
 
 
   <!-- 是否加载使用自带的 prismjs. -->
-  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+  <script type="text/javascript" src="../../../../libs/prism/prism.min.js"></script>
 
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="../../../../libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="../../../../libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="../../../../libs/codeBlock/codeShrink.js"></script>
 
 
 
@@ -884,7 +954,7 @@
 </div>
 
 
-<script src="/libs/tocbot/tocbot.min.js"></script>
+<script src="../../../../libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -956,7 +1026,7 @@
 
     <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+        <link rel="stylesheet" href="../../../../libs/aplayer/APlayer.min.css">
 <style>
     .aplayer .aplayer-lrc p {
         
@@ -992,22 +1062,22 @@
         <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
                    server="netease"
                    type="playlist"
-                   id="503838841"
+                   id="824543813"
                    fixed='true'
                    autoplay='false'
                    theme='#42b983'
                    loop='all'
                    order='random'
                    preload='auto'
-                   volume='0.7'
+                   volume='0.5'
                    list-folded='true'
         >
         </meting-js>
     </div>
 </div>
 
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="/libs/aplayer/Meting.min.js"></script>
+<script src="../../../../libs/aplayer/APlayer.min.js"></script>
+<script src="../../../../libs/aplayer/Meting.min.js"></script>
 
     
 	<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" 
@@ -1021,7 +1091,7 @@
             
                 <span id="year">2019-2022</span>
             
-            <a href="/about" target="_blank">秋名山翻车的</a>
+            <a href="../../../../about" target="_blank">秋名山翻车的</a>
             |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
             |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
             <br>
@@ -1050,13 +1120,13 @@
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/blinkfox" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+    <a href="https://github.com/kingpopen" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
         <i class="fab fa-github"></i>
     </a>
 
 
 
-    <a href="mailto:1181062873@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+    <a href="mailto:kingpopen@163.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
         <i class="fas fa-envelope-open"></i>
     </a>
 
@@ -1066,7 +1136,7 @@
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1181062873" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1181062873" data-position="top" data-delay="50">
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1257022178" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1257022178" data-position="top" data-delay="50">
         <i class="fab fa-qq"></i>
     </a>
 
@@ -1076,7 +1146,7 @@
 
 
 
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+    <a href="../../../../atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
         <i class="fas fa-rss"></i>
     </a>
 
@@ -1187,7 +1257,7 @@ $(function () {
         });
     };
 
-    searchFunc('/search.xml', 'searchInput', 'searchResult');
+    searchFunc('../../../../search.xml', 'searchInput', 'searchResult');
 });
 </script>
 
@@ -1199,12 +1269,12 @@ $(function () {
 </div>
 
 
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
+    <script src="../../../../libs/materialize/materialize.min.js"></script>
+    <script src="../../../../libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="../../../../libs/aos/aos.js"></script>
+    <script src="../../../../libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="../../../../libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="../../../../js/matery.js"></script>
 
     
 
@@ -1218,7 +1288,7 @@ $(function () {
 
      
         <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
-        <script src="/libs/others/TencentCaptcha.js"></script>
+        <script src="../../../../libs/others/TencentCaptcha.js"></script>
         <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
     
 
@@ -1241,10 +1311,10 @@ $(function () {
 </script>
 
     
-    <script src="/libs/others/clicklove.js" async="async"></script>
+    <script src="../../../../libs/others/clicklove.js" async="async"></script>
     
     
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    <script async src="../../../../libs/others/busuanzi.pure.mini.js"></script>
     
 
     
@@ -1260,7 +1330,7 @@ $(function () {
     
 
     
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="../../../../libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>
