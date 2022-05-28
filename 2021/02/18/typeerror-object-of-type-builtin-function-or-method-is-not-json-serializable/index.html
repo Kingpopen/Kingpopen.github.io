@@ -4,8 +4,11 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, 秋名山翻车的博客">
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex">
+    <meta name="keywords" content="TypeError: Object of type ‘builtin_function_or_method‘ is not JSON serializable, 秋名山翻车的博客">
+    <meta name="description" content="一、问题描述
+使用python3在将字典保存为json的时候报错：TypeError: Object of type ‘builtin_function_or_method’ is not JSON serializable.
+
+json.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -19,7 +22,7 @@
 
     
 
-    <title>Hello World | 秋名山翻车的博客</title>
+    <title>TypeError: Object of type ‘builtin_function_or_method‘ is not JSON serializable | 秋名山翻车的博客</title>
     <link rel="icon" type="image/png" href="../../../../favicon.png">
 
     <link rel="stylesheet" type="text/css" href="../../../../libs/awesome/css/all.min.css">
@@ -250,7 +253,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">TypeError: Object of type ‘builtin_function_or_method‘ is not JSON serializable</h1>
                 </div>
             </div>
         </div>
@@ -364,9 +367,17 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="../../../../tags/python/">
+                                <span class="chip bg-color">python</span>
+                            </a>
+                        
+                            <a href="../../../../tags/bug/">
+                                <span class="chip bg-color">bug</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
@@ -378,21 +389,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-05-27
+                    2021-02-18
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-05-27
+                    2022-05-28
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    73
+                    194
                 </div>
                 
 
@@ -417,19 +428,24 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+                <h3 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h3><blockquote>
+<p>使用python3在将字典保存为json的时候报错：TypeError: Object of type ‘builtin_function_or_method’ is not JSON <a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=serializable&amp;spm=1001.2101.3001.7020">serializable</a>.</p>
+</blockquote>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">json<span class="token punctuation">.</span>dump<span class="token punctuation">(</span>data<span class="token punctuation">,</span> <span class="token builtin">open</span><span class="token punctuation">(</span>os<span class="token punctuation">.</span>path<span class="token punctuation">.</span>join<span class="token punctuation">(</span>save_dir<span class="token punctuation">,</span> save_name<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">'w'</span><span class="token punctuation">,</span> encoding<span class="token operator">=</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span><span class="token punctuation">,</span> indent<span class="token operator">=</span><span class="token number">4</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p><img src="1.png" alt="图1 bug图"></p>
+<h3 id="二、问题解决"><a href="#二、问题解决" class="headerlink" title="二、问题解决"></a>二、问题解决</h3><blockquote>
+<p>因为在data字典类型数据中，使用了一个将numpy类型数据转为list类型数据的tolist()方法，而我的tolist()方法没有加括号orz，我加上括号后，问题就解决啦。</p>
+</blockquote>
+<p><img src="2.png" alt="图2 bug代码图"></p>
+<blockquote>
+<p>给tolist方法加上括号:</p>
+</blockquote>
+<p><img src="3.png" alt="图3 问题解决图"></p>
+<blockquote>
+<p>在百度上一直找不到相应的解决方法，最后在stackoverflow上看到了类似的问题，并给出了解决方法，我在此做一个记录，希望对遇到同样问题的朋友有些帮助！</p>
+</blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/59243262/typeerror-object-of-type-builtin-function-or-method-is-not-json-serializable">https://stackoverflow.com/questions/59243262/typeerror-object-of-type-builtin-function-or-method-is-not-json-serializable</a></p>
 
                 
             </div>
@@ -493,7 +509,15 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="../../../../tags/python/">
+                                    <span class="chip bg-color">python</span>
+                                </a>
+                            
+                                <a href="../../../../tags/bug/">
+                                    <span class="chip bg-color">bug</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -669,13 +693,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="../di-yi-pian-bo-ke/">
+                <a href="../../../07/27/maskrcnn-benckmark-master-ling-dai-ma-jie-du/">
                     <div class="card-image">
                         
                         
-                        <img src="../../../../medias/featureimages/13.jpg" class="responsive-img" alt="第一篇博客">
+                        <img src="../../../../medias/featureimages/22.jpg" class="responsive-img" alt="maskrcnn-benckmark-master （零）：代码解读">
                         
-                        <span class="card-title">第一篇博客</span>
+                        <span class="card-title">maskrcnn-benckmark-master （零）：代码解读</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -686,57 +710,8 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-05-27
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-27
                         </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            秋名山翻车的
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="../../../../tags/%E8%AE%B0%E5%BD%95/">
-                        <span class="chip bg-color">记录</span>
-                    </a>
-                    
-                    <a href="../../../../tags/%E7%94%9F%E6%B4%BB/">
-                        <span class="chip bg-color">生活</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="../../../../2021/08/03/maskrcnn-benchmark-master-shi-box-head-de-loss-wen-jian/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="../../../../medias/featureimages/18.jpg" class="responsive-img" alt="maskrcnn-benchmark-master（十）：box_head的loss文件">
-                        
-                        <span class="card-title">maskrcnn-benchmark-master（十）：box_head的loss文件</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-03
-                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -754,6 +729,55 @@
                     
                     <a href="../../../../tags/MaskRCNN/">
                         <span class="chip bg-color">MaskRCNN</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="../../13/lun-wen-yue-du-automatic-car-damage-assessment-system/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="../../../../medias/featureimages/20.jpg" class="responsive-img" alt="论文阅读：Automatic Car Damage Assessment System">
+                        
+                        <span class="card-title">论文阅读：Automatic Car Damage Assessment System</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-02-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            秋名山翻车的
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="../../../../tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+                        <span class="chip bg-color">深度学习</span>
+                    </a>
+                    
+                    <a href="../../../../tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">
+                        <span class="chip bg-color">论文阅读</span>
                     </a>
                     
                 </div>
@@ -950,7 +974,7 @@
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">17.9k</span>
+                        class="white-color">22.3k</span>
             
             
             
